@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>CBT Portal</title>
+  <script>
+    // Check if user is logged in
+    const user = localStorage.getItem('user');
+    
+    if (!user) {
+      // Not logged in, send to register
+      window.location.replace('registration.html');
+    } else {
+      // Logged in, send to home
+      window.location.replace('home.html');
+    }
+  </script>
+</head>
+<body>
+  <p>Loading...</p>
+</body>
+</html>
