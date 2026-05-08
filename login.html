@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Login - CBT Portal</title>
+<style>
+:root {
+  --primary: #10b981;        
+  --primary-light: #34d399;  
+  --primary-dark: #059669;   
+  --accent: #6ee7b7;         
+  --bg: linear-gradient(135deg, #064e3b, #065f46, #047857);
+  --text: #ecfdf5;           
+  --card-bg: rgba(255, 255, 255, 0.12); 
+  --glass: rgba(16, 185, 129, 0.15);  
+  --glass-border: rgba(110, 231, 183, 0.3); 
+  --shad: 0 8px 32px rgba(6, 95, 70, 0.3);
+  --radius-lg: 20px;
+  --radius-md: 15px;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, Arial, sans-serif;
+}
+
+.card {
+  max-width: 400px;
+  width: 90%;
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  padding: 32px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shad);
+}
+
+h1 { text-align: center; margin: 0 0 24px 0; }
+
+input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--glass-border);
+  background: var(--glass);
+  color: var(--text);
+  box-sizing: border-box;
+}
+
+input::placeholder { color: rgba(236, 253, 245, 0.6); }
+
+button {
+  width: 100%;
+  padding: 12px;
+  border-radius: var(--radius-md);
+  border: none;
+  background: var(--primary);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button:hover { background: var(--primary-dark); }
+button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.message { margin-top: 12px; text-align: center; font-size: 14px; }
+.error { color: #fca5a5; }
+.success { color: var(--accent); }
+
+.links {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+  font-size: 14px;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>Login</h1>
+  <input id="login" type="text" placeholder="Username or Email" />
+  <input id="password" type="password" placeholder="Password" />
+  <button id="loginBtn">Login</button>
+  <div id="message" class="message"></div>
+  
+  <div class="links">
+    <a href="forgot-password.html">Forgot Password?</a>
+    <a href="registration.html">Create Account</a>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script>
+document.getElementById('loginBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('loginBtn');
+  const login = document.getElementById('login').value.trim();
+  const password = document.getElementById('password').value.trim();
+
+  if(!login || !password) {
+    showMessage('Fill all fields', 'error');
+    return;
+  }
+
+  btn.disabled = true;
+  showMessage('Logging in...', '');
+
+  try {
+    const res = await fetch(`${API_URL}/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ login, password })
+    });
+
+    const result = await res.json();
+
+    if(res.ok) {
+      localStorage.setItem('user', JSON.stringify(result.user));
+      showMessage('Login successful!', 'success');
+      // Redirect to dashboard or home page
+      setTimeout(() => window.location.href = 'index.html', 1000);
+    } else {
+      showMessage(result.error || 'Login failed', 'error');
+      btn.disabled = false;
+    }
+  } catch {
+    showMessage('Network error', 'error');
+    btn.disabled = false;
+  }
+});
+
+function showMessage(text, type) {
+  const el = document.getElementById('message');
+  el.textContent = text;
+  el.className = 'message ' + type;
+}
+</script>
+</body>
+</html>
