@@ -3,20 +3,51 @@
 <head>
   <meta charset="utf-8" />
   <title>CBT Portal</title>
-  <script>
-    // Check if user is logged in
-    const user = localStorage.getItem('user');
-    
-    if (!user) {
-      // Not logged in, send to register
-      window.location.replace('registration.html');
-    } else {
-      // Logged in, send to home
-      window.location.replace('home.html');
+  <style>
+    body {
+      background: linear-gradient(135deg, #064e3b, #065f46, #047857);
+      color: #ecfdf5;
+      font-family: system-ui, Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
     }
+    .box {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(110,231,183,0.3);
+      padding: 30px;
+      border-radius: 20px;
+      text-align: center;
+    }
+    a { color: #6ee7b7; }
+  </style>
+  <script>
+    // Wait for DOM so we can show errors
+    window.addEventListener('DOMContentLoaded', () => {
+      try {
+        const user = localStorage.getItem('user');
+        
+        if (!user) {
+          // Not logged in - go to register
+          window.location.replace('registration.html');
+        } else {
+          // Logged in - go to home
+          window.location.replace('home.html');
+        }
+      } catch (e) {
+        document.getElementById('msg').innerHTML = 
+          'Error: ' + e.message + '<br><br>' +
+          'Make sure <b>registration.html</b> and <b>home.html</b> are in the same folder as this file.<br><br>' +
+          '<a href="registration.html">Go to Register manually</a>';
+      }
+    });
   </script>
 </head>
 <body>
-  <p>Loading...</p>
+  <div class="box">
+    <p id="msg">Loading...</p>
+  </div>
 </body>
 </html>
