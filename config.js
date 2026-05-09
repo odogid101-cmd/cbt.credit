@@ -1,2 +1,2 @@
-const API_URL = "https://cbt-credit101.onrender.com";
+const API_URL = "https://cbt-credit-zxgb.onrender.com";
 
