@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Admin - Create Quiz</title>
+<style>
+:root {
+  --primary: #10b981;
+  --primary-dark: #059669;
+  --accent: #6ee7b7;
+  --bg: linear-gradient(135deg, #064e3b, #065f46, #047857);
+  --text: #ecfdf5;
+  --card-bg: rgba(255, 255, 255, 0.12);
+  --glass: rgba(16, 185, 129, 0.15);
+  --glass-border: rgba(110, 231, 183, 0.3);
+  --radius-lg: 20px;
+  --radius-md: 15px;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; min-height: 100vh; background: var(--bg); color: var(--text);
+  font-family: system-ui, Arial, sans-serif; padding: 20px;
+}
+.card {
+  max-width: 500px; margin: 50px auto; background: var(--card-bg);
+  backdrop-filter: blur(12px); border: 1px solid var(--glass-border);
+  padding: 30px; border-radius: var(--radius-lg);
+}
+input {
+  width: 100%; padding: 12px; margin: 8px 0; border-radius: var(--radius-md);
+  border: 1px solid var(--glass-border); background: var(--glass); color: var(--text);
+}
+button {
+  width: 100%; padding: 12px; border-radius: var(--radius-md); border: none;
+  background: var(--primary); color: #fff; cursor: pointer; margin-top: 10px;
+  font-weight: 600;
+}
+button:hover { background: var(--primary-dark); }
+.auth-switch { text-align: center; margin-top: 12px; color: rgba(236, 253, 245, 0.8); }
+.auth-switch a { color: var(--accent); cursor: pointer; }
+.success { color: var(--accent); text-align: center; }
+.error { color: #fca5a5; text-align: center; }
+.hidden { display: none!important; }
+.top-bar { display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto 10px; }
+</style>
+</head>
+<body>
+
+<div id="auth_section">
+  <div class="card">
+    <h2 id="auth_title">Login</h2>
+    <div id="login_form">
+      <input type="text" id="login_identifier" placeholder="Username or Email">
+      <input type="password" id="login_password" placeholder="Password">
+      <button onclick="login()">Login</button>
+      <div class="auth-switch">
+        <a href="admin-forget.html">Forgot Password?</a> |
+        <a onclick="showRegister()">Create Account</a>
+      </div>
+    </div>
+
+    <div id="register_form" class="hidden">
+      <input type="text" id="reg_username" placeholder="Username">
+      <input type="email" id="reg_email" placeholder="Email">
+      <input type="password" id="reg_password" placeholder="Password">
+      <button onclick="register()">Create Account</button>
+      <div class="auth-switch">
+        Already have an account? <a onclick="showLogin()">Login</a>
+      </div>
+    </div>
+
+    <div id="auth_message"></div>
+  </div>
+</div>
+
+<div id="admin_section" class="hidden">
+  <div class="top-bar">
+    <h3 id="welcome_user">Welcome</h3>
+    <button class="ghost" onclick="logout()">Logout</button>
+  </div>
+  <div class="card">
+    <h2>Admin Panel</h2>
+    <p>Login successful. You can now manage quizzes.</p>
+    <button onclick="window.location.href='admin-Quiz-monitor.html'">Open Payment Monitor</button>
+  </div>
+</div>
+
+  <script src="configQuiz.js"></script>
+<script>
+
+let USER_ID = localStorage.getItem('user_id') || null;
+let USERNAME = localStorage.getItem('username') || null;
+
+window.onload = function() {
+  if (USER_ID) checkSubscriptionAndShowPanel();
+}
+
+function showLogin() {
+  document.getElementById('login_form').classList.remove('hidden');
+  document.getElementById('register_form').classList.add('hidden');
+  document.getElementById('auth_title').innerText = 'Login';
+  document.getElementById('auth_message').innerHTML = '';
+}
+
+function showRegister() {
+  document.getElementById('login_form').classList.add('hidden');
+  document.getElementById('register_form').classList.remove('hidden');
+  document.getElementById('auth_title').innerText = 'Create Account';
+  document.getElementById('auth_message').innerHTML = '';
+}
+
+async function register() {
+  const username = document.getElementById('reg_username').value.trim();
+  const email = document.getElementById('reg_email').value.trim();
+  const password = document.getElementById('reg_password').value.trim();
+
+  if (!username ||!email ||!password) {
+    showAuthMessage('Fill all fields', 'error'); return;
+  }
+
+  const res = await fetch(`${CONFIG.API_URL}/register`, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ username, email, password })
+  });
+  const data = await res.json();
+
+  if (res.ok) {
+    localStorage.setItem('user_id', data.user_id);
+    localStorage.setItem('email', email);
+    localStorage.setItem('amount', data.amount);
+    showAuthMessage('Account created! Redirecting to payment...', 'success');
+    setTimeout(() => { window.location.href = 'payment.html'; }, 1500);
+  } else {
+    showAuthMessage(data.error || 'Registration failed', 'error');
+  }
+}
+
+async function login() {
+  const identifier = document.getElementById('login_identifier').value.trim();
+  const password = document.getElementById('login_password').value.trim();
+
+  if (!identifier ||!password) {
+    showAuthMessage('Fill all fields', 'error'); return;
+  }
+
+  const res = await fetch(`${CONFIG.API_URL}/login`, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ login: identifier, password })
+  });
+  const data = await res.json();
+
+  if (res.ok) {
+    USER_ID = data.user_id;
+    USERNAME = data.user.username;
+    localStorage.setItem('user_id', USER_ID);
+    localStorage.setItem('username', USERNAME);
+    showAdminPanel();
+  } else {
+    if (data.subscription_status === 'inactive' || data.subscription_status === 'expired') {
+      localStorage.setItem('user_id', data.user_id || USER_ID);
+      localStorage.setItem('email', identifier);
+      localStorage.setItem('amount', data.amount);
+      window.location.href = 'payment.html';
+    } else {
+      showAuthMessage(data.error || 'Login failed', 'error');
+    }
+  }
+}
+
+function showAdminPanel() {
+  document.getElementById('auth_section').classList.add('hidden');
+  document.getElementById('admin_section').classList.remove('hidden');
+  document.getElementById('welcome_user').innerText = `Welcome, ${USERNAME}`;
+}
+
+function logout() {
+  localStorage.clear();
+  location.reload();
+}
+
+function showAuthMessage(msg, type) {
+  document.getElementById('auth_message').innerHTML = `<p class="${type}">${msg}</p>`;
+}
+</script>
+</body>
+</html>

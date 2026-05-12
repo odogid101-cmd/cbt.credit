@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Payment</title>
+<style>
+body { margin:0; min-height:100vh; background:linear-gradient(135deg,#064e3b,#065f46,#047857);
+  color:#ecfdf5; font-family:system-ui; padding:20px; }
+.card { max-width:500px; margin:30px auto; background:rgba(255,255,255,0.12);
+  backdrop-filter:blur(12px); border:1px solid rgba(110,231,183,0.3);
+  padding:30px; border-radius:20px; }
+button { width:100%; padding:12px; margin:10px 0; border-radius:15px; border:none;
+  background:#10b981; color:white; font-weight:600; cursor:pointer; }
+button.ghost { background:transparent; border:1px solid rgba(110,231,183,0.3); }
+input { width:100%; padding:12px; margin:8px 0; border-radius:15px;
+  border:1px solid rgba(110,231,183,0.3); background:rgba(16,185,129,0.15); color:white; }
+.bank-box { background:rgba(16,185,129,0.15); padding:15px; border-radius:15px; margin:15px 0; }
+.hidden { display:none; }
+.msg { text-align:center; margin-top:10px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <h2>Choose Payment Method</h2>
+  <p>Amount: ₦<span id="amount">100</span>/month</p>
+
+  <button onclick="showPaystack()">Pay with Paystack</button>
+  <button class="ghost" onclick="showBankTransfer()">Pay with Bank Transfer</button>
+
+  <div id="paystack_div" class="hidden">
+    <p>Redirecting to Paystack...</p>
+  </div>
+
+  <div id="bank_div" class="hidden">
+    <h3>Bank Transfer Details</h3>
+    <div class="bank-box">
+      <p><strong>Bank:</strong> Palmpay</p>
+      <p><strong>Account Name:</strong> Odo Gideon Chimuanya</p>
+      <p><strong>Account Number:</strong> 9136573852</p>
+    </div>
+    <p>Transfer the amount, then upload your receipt:</p>
+    <input type="file" id="receipt" accept="image/*">
+    <button onclick="submitReceipt()">Submit Receipt</button>
+  </div>
+
+  <div id="msg" class="msg"></div>
+</div>
+
+  <script src="configQuiz.js"></script>
+<script>
+
+const user_id = localStorage.getItem('user_id');
+const email = localStorage.getItem('email');
+document.getElementById('amount').textContent = localStorage.getItem('amount') || '100';
+
+function showPaystack() {
+  document.getElementById('paystack_div').classList.remove('hidden');
+  document.getElementById('bank_div').classList.add('hidden');
+  initializePaystack();
+}
+
+function showBankTransfer() {
+  document.getElementById('bank_div').classList.remove('hidden');
+  document.getElementById('paystack_div').classList.add('hidden');
+}
+
+async function initializePaystack() {
+  const res = await fetch(`${CONFIG.API_URL}/paystack/initialize`, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      user_id: user_id,
+      email: email,
+      callback_url: window.location.origin + '/payment-callback.html'
+    })
+  });
+  const data = await res.json();
+  if (data.status) {
+    window.location.href = data.data.authorization_url;
+  } else {
+    showMsg('Paystack not activated. Use bank transfer.', 'error');
+  }
+}
+
+async function submitReceipt() {
+  const file = document.getElementById('receipt').files[0];
+  if (!file) { showMsg('Select a receipt image', 'error'); return; }
+
+  showMsg('Uploading receipt...', '');
+
+  const formData = new FormData();
+  formData.append('image', file);
+
+  const uploadRes = await fetch(`https://api.imgbb.com/1/upload?key=${CONFIG.IMGBB_API_KEY}`, {
+    method: 'POST', body: formData
+  });
+  const uploadData = await uploadRes.json();
+
+  if (!uploadData.success) { showMsg('Upload failed', 'error'); return; }
+
+  const res = await fetch(`${CONFIG.API_URL}/banktransfer/submit`, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ user_id: user_id, receipt_url: uploadData.data.url })
+  });
+
+  const data = await res.json();
+  showMsg(data.message, res.ok? 'success' : 'error');
+}
+
+function showMsg(text, type) {
+  document.getElementById('msg').textContent = text;
+  document.getElementById('msg').style.color = type === 'error'? '#fca5a5' : '#6ee7b7';
+}
+</script>
+</body>
+</html>
