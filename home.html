@@ -2,17 +2,101 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.1">
-  <title>Test||</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CBT Credit - Home</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css.css">
+  <style>
+    /* Dropdown styles */
+    .profile-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+    
+    .profile-dropdown {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 60px;
+      background: #1e1e1e;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 14px;
+      min-width: 240px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+      z-index: 1000;
+    }
+    
+    .profile-dropdown.show {
+      display: block;
+    }
+    
+    .profile-dropdown .user-info {
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      margin-bottom: 10px;
+    }
+    
+    .profile-dropdown .user-info p {
+      margin: 5px 0;
+      font-size: 14px;
+      color: #e0e0e0;
+      word-break: break-all;
+    }
+    
+    .profile-dropdown .user-info .full-name {
+      font-weight: 600;
+      font-size: 15px;
+      color: #fff;
+    }
+    
+    .profile-dropdown .user-info .username {
+      font-size: 13px;
+      color: #6ee7b7;
+    }
+    
+    .profile-dropdown button {
+      width: 100%;
+      padding: 10px;
+      background: #ff4d4f;
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'Poppins', sans-serif;
+      transition: background 0.2s;
+    }
+    
+    .profile-dropdown button:hover {
+      background: #d9363e;
+    }
+    
+    .circle2 img {
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body class="dark-mode">
   <!-- HEADER -->
   <header class="header">
-    <div class="circle2"><img src="https://i.postimg.cc/JhG5Z8V8/1000323583-removebg-preview.png" alt="profile"></div>
+    <div class="profile-wrapper">
+      <div class="circle2" id="profileBtn">
+        <img src="https://i.postimg.cc/JhG5Z8V8/1000323583-removebg-preview.png" alt="profile">
+      </div>
+      
+      <div class="profile-dropdown" id="profileDropdown">
+        <div class="user-info">
+          <p class="full-name" id="dropdownFullName">Guest</p>
+          <p class="username" id="dropdownUsername">@guest</p>
+          <p class="email" id="dropdownEmail">Not logged in</p>
+        </div>
+        <button onclick="logout()">Logout</button>
+      </div>
+    </div>
+
     <div class="title">Welcome to CBT Credit</div>
-    <div class="circle"><img src="https://i.postimg.cc/LXstcL8M/1000322723-removebg-preview.png"></div>
+    <div class="circle"><img src="https://i.postimg.cc/LXstcL8M/1000322723-removebg-preview.png" alt="logo"></div>
   </header>
 
   <!-- SLIDER -->
@@ -54,7 +138,7 @@
         <h4>JAMB</h4>
         <small>CBT</small>
       </div>
-      <div class="card" >
+      <div class="card">
         <span><img src="https://i.postimg.cc/J0ps1C9g/1000324053-removebg-preview.png" alt=""></span>
         <h4>CBT</h4>
         <small>Live</small>
@@ -72,50 +156,87 @@
   <section class="section news">
     <h2>News</h2>
     <div class="box">
-    <div class="news-item">•Welcome to CBT Credit</div>
-    <div class="news-item">•CBT Packages Updated</div>
-    <div class="news-item">•Live CBT Sessions</div>
+      <div class="news-item">• Welcome to CBT Credit</div>
+      <div class="news-item">• CBT Packages Updated</div>
+      <div class="news-item">• Live CBT Sessions</div>
     </div>
   </section>
 
- 
-    <!-- FOOTER -->
-<footer class="footer">
-  <div onclick="location.href='home.html'">
-    <div class="act active"><img src="https://i.postimg.cc/63Qrknpx/1000322905-removebg-preview.png"></div>
-    <h4>Home</h4>
-  </div>
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div onclick="location.href='home.html'">
+      <div class="act active"><img src="https://i.postimg.cc/63Qrknpx/1000322905-removebg-preview.png"></div>
+      <h4>Home</h4>
+    </div>
 
-  <div onclick="location.href='packages.html'">
-    <div class="act1"><img src="https://i.postimg.cc/jS8hD59x/1000323589-removebg-preview.png"></div>
-    <h4>Packages</h4>
-  </div>
+    <div onclick="location.href='packages.html'">
+      <div class="act1"><img src="https://i.postimg.cc/jS8hD59x/1000323589-removebg-preview.png"></div>
+      <h4>Packages</h4>
+    </div>
 
-  <div onclick="location.href='study.html'">
-    <div class="act1"><img src="https://i.postimg.cc/yxLDVCwb/1000324051-removebg-preview.png"></div>
-    <h4>Study</h4>
-  </div>
+    <div onclick="location.href='study.html'">
+      <div class="act1"><img src="https://i.postimg.cc/yxLDVCwb/1000324051-removebg-preview.png"></div>
+      <h4>Study</h4>
+    </div>
 
-  <div onclick="location.href='live.html'">
-    <div class="act"><img src="https://i.postimg.cc/J0ps1C9g/1000324053-removebg-preview.png"></div>
-    <h4>Live</h4>
-  </div>
+    <div onclick="location.href='live.html'">
+      <div class="act"><img src="https://i.postimg.cc/J0ps1C9g/1000324053-removebg-preview.png"></div>
+      <h4>Live</h4>
+    </div>
 
-  <div onclick="location.href='admin-quize.html'">
-    <div class="act1"><img src="https://i.postimg.cc/fy8VwQ62/1000324052-removebg-preview.png"></div>
-    <h4>Host Quiz</h4>
-  </div>
+    <div onclick="location.href='admin-quize.html'">
+      <div class="act1"><img src="https://i.postimg.cc/fy8VwQ62/1000324052-removebg-preview.png"></div>
+      <h4>Host Quiz</h4>
+    </div>
 
-  <div onclick="location.href='chat.html'">
-    <div class="act1"><img src="https://i.postimg.cc/rwh9Dmbw/1000323587-removebg-preview.png"></div>
-    <h4>Chat</h4>
-  </div>
+    <div onclick="location.href='chat.html'">
+      <div class="act1"><img src="https://i.postimg.cc/rwh9Dmbw/1000323587-removebg-preview.png"></div>
+      <h4>Chat</h4>
+    </div>
 
-  <div onclick="location.href='profile.html'">
-    <div class="act1"><img src="https://i.postimg.cc/JhG5Z8V8/1000323583-removebg-preview.png"></div>
-    <h4>Profile</h4>
-  </div>
+    <div onclick="location.href='profile.html'">
+      <div class="act1"><img src="https://i.postimg.cc/JhG5Z8V8/1000323583-removebg-preview.png"></div>
+      <h4>Profile</h4>
+    </div>
   </footer>
+
   <script src="JS.js"></script>
+  <script>
+    const profileBtn = document.getElementById('profileBtn');
+    const dropdown = document.getElementById('profileDropdown');
+    const fullNameEl = document.getElementById('dropdownFullName');
+    const usernameEl = document.getElementById('dropdownUsername');
+    const emailEl = document.getElementById('dropdownEmail');
+
+    // Load user data from localStorage on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      const fullName = localStorage.getItem('full_name') || 'Guest';
+      const username = localStorage.getItem('username') || 'guest';
+      const email = localStorage.getItem('email') || 'Not logged in';
+      
+      fullNameEl.textContent = fullName;
+      usernameEl.textContent = '@' + username;
+      emailEl.textContent = email;
+    });
+
+    // Toggle dropdown on profile click
+    profileBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dropdown.classList.toggle('show');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!dropdown.contains(e.target) && !profileBtn.contains(e.target)) {
+        dropdown.classList.remove('show');
+      }
+    });
+
+    // Logout function
+    function logout() {
+      localStorage.clear();
+      window.location.href = 'login.html';
+    }
+  </script>
 </body>
-</html>
+  </html>
