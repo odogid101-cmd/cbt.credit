@@ -118,7 +118,7 @@ document.getElementById('loginBtn').addEventListener('click', async () => {
     if(res.ok) {
       showMessage('Login successful! Redirecting...', 'success');
       localStorage.setItem('user', JSON.stringify(result.user));
-      setTimeout(() => window.location.href = 'dashboard.html', 1500);
+      setTimeout(() => window.location.href = 'home.html', 1500);
     } else {
       showMessage(result.error || 'Login failed', 'error');
       btn.disabled = false;
