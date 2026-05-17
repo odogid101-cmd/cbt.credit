@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>CBT Exam</title>
+  <link rel="stylesheet" href="css.css">
+  <link rel="stylesheet" href="exam.css">
+</head>
+<body class="exam-mode">
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <div class="status-icons">
+      <span id="battery">85%</span>
+    </div>
+  </div>
+
+  <!-- EXAM HEADER -->
+  <div class="exam-header">
+    <button class="calc-btn" id="calcBtn">?</button>
+    <div class="exam-title" id="examTitle">Loading...</div>
+    <div class="timer" id="timer">00:00:00</div>
+  </div>
+
+  <!-- SUBJECT TABS -->
+  <div class="subject-tabs" id="subjectTabs" style="display:none;"></div>
+
+  <!-- MAIN SCROLL AREA -->
+  <div class="exam-scroll-area">
+    <!-- QUESTION CARD -->
+    <div class="question-card">
+      <div class="question-header">
+        <div class="question-counter" id="questionCounter">Question 1 of 1</div>
+        <div class="question-subject" id="questionSubject">Subject</div>
+      </div>
+      <div class="question-image" id="questionImage" style="display:none;">
+        <img src="" alt="Question Image">
+      </div>
+      <div class="question-text" id="questionText">Loading...</div>
+      <div class="options" id="optionsContainer"></div>
+
+      <!-- CONTROLS INSIDE CARD -->
+      <div class="question-controls">
+        <button class="btn btn-secondary" id="prevBtn">Previous</button>
+        <button class="btn" id="nextBtn">Next</button>
+        <button class="btn btn-danger" id="submitBtn">Submit</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUESTION NAV FOOTER - THIN + EXPANDABLE -->
+  <div class="question-footer" id="questionFooter">
+    <div class="footer-handle" id="footerHandle">
+      <div class="handle-bar"></div>
+    </div>
+    <div class="question-nav" id="questionNav"></div>
+  </div>
+
+  <!-- CALCULATOR MODAL -->
+  <div class="modal-overlay" id="calcModal">
+    <div class="calc-card">
+      <div class="calc-display" id="calcDisplay">0</div>
+      <div class="calc-buttons">
+        <button class="calc-btn-sm" data-val="C">C</button>
+        <button class="calc-btn-sm" data-val="(">(</button>
+        <button class="calc-btn-sm" data-val=")">)</button>
+        <button class="calc-btn-sm op" data-val="/">÷</button>
+        <button class="calc-btn-sm" data-val="7">7</button>
+        <button class="calc-btn-sm" data-val="8">8</button>
+        <button class="calc-btn-sm" data-val="9">9</button>
+        <button class="calc-btn-sm op" data-val="*">×</button>
+        <button class="calc-btn-sm" data-val="4">4</button>
+        <button class="calc-btn-sm" data-val="5">5</button>
+        <button class="calc-btn-sm" data-val="6">6</button>
+        <button class="calc-btn-sm op" data-val="-">-</button>
+        <button class="calc-btn-sm" data-val="1">1</button>
+        <button class="calc-btn-sm" data-val="2">2</button>
+        <button class="calc-btn-sm" data-val="3">3</button>
+        <button class="calc-btn-sm op" data-val="+">+</button>
+        <button class="calc-btn-sm zero" data-val="0">0</button>
+        <button class="calc-btn-sm" data-val=".">.</button>
+        <button class="calc-btn-sm op" data-val="=">=</button>
+      </div>
+      <button class="btn" id="calcCloseBtn">Close</button>
+    </div>
+  </div>
+
+  <!-- SUBMIT CONFIRMATION MODAL -->
+  <div class="modal-overlay" id="submitModal">
+    <div class="confirm-card">
+      <div class="confirm-icon">⚠</div>
+      <h3>Submit Exam?</h3>
+      <p>You won't be able to change answers after submitting.</p>
+      <div class="confirm-buttons">
+        <button class="btn btn-secondary" id="submitNo">No, Cancel</button>
+        <button class="btn btn-danger" id="submitYes">Yes, Submit</button>
+      </div>
+    </div>
+  </div>
+
+<script src="exam.js"></script>
+</body>
+</html>
