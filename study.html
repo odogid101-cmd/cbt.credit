@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Study Hub</title>
+  <link rel="stylesheet" href="css.css">
+</head>
+<body>
+  <!-- theme will still apply from localStorage, but no floating card -->
+  <script>
+    // Just apply saved theme
+    const theme = localStorage.getItem('cbt_theme_mode') || 'normal';
+    if (theme === 'light') document.body.classList.add('light-mode');
+    if (theme === 'dark') document.body.classList.add('dark-mode');
+  </script>
+  <div class="container">
+    <div class="header">
+      <div class="title">
+        <h3>Study Hub</h3>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="cards">
+        <div class="card" onclick="location.href='cbt-pract.html'">
+          <img src="https://i.postimg.cc/hjVgjNq4/20260521-125546.png" alt="practice">
+          <h4>Practice CBT</h4>
+        </div>
+
+        <div class="card" onclick="location.href='cbt-exam.html'">
+          <img src="https://i.postimg.cc/RFw9F2zZ/20260521-125112.png" alt="exam">
+          <h4>Exam CBT</h4>
+        </div>
+
+        <div class="card" onclick="location.href='lib.html'">
+          <img src="https://i.postimg.cc/sxyzZKVz/1000351180-removebg-preview.png" alt="library">
+          <h4>Library</h4>
+          </div>
+      </div>
+    </div>
+  </div>
+
+ <footer class="footer">
+    <div onclick="location.href='home.html'">
+      <div class="act1"><img src="https://i.postimg.cc/63Qrknpx/1000322905-removebg-preview.png"></div>
+      <h4>Home</h4>
+    </div>
+
+    <div onclick="location.href='packages.html'">
+      <div class="act1"><img src="https://i.postimg.cc/jS8hD59x/1000323589-removebg-preview.png"></div>
+      <h4>Packages</h4>
+    </div>
+
+    <div onclick="location.href='study.html'">
+      <div class="act active"><img src="https://i.postimg.cc/yxLDVCwb/1000324051-removebg-preview.png"></div>
+      <h4>Study</h4>
+    </div>
+
+    <div onclick="location.href='live.html'">
+      <div class="act"><img src="https://i.postimg.cc/J0ps1C9g/1000324053-removebg-preview.png"></div>
+      <h4>Live</h4>
+    </div>
+
+    <div onclick="location.href='admin-quize.html'">
+      <div class="act1"><img src="https://i.postimg.cc/fy8VwQ62/1000324052-removebg-preview.png"></div>
+      <h4>Host Quiz</h4>
+    </div>
+
+    <div onclick="location.href='chat.html'">
+      <div class="act1"><img src="https://i.postimg.cc/rwh9Dmbw/1000323587-removebg-preview.png"></div>
+      <h4>Chat</h4>
+    </div>
+
+    <div onclick="location.href='profile.html'">
+      <div class="act1"><img src="https://i.postimg.cc/JhG5Z8V8/1000323583-removebg-preview.png"></div>
+      <h4>Profile</h4>
+    </div>
+  </footer>
+
+  <div class="toast-container" id="toastContainer"></div>
+</body>
+</html>
