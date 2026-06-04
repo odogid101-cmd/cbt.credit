@@ -1,6 +1,6 @@
 import { showToast } from './toast.js';
 
-const API_BASE = ''; // Set your Flask URL here, e.g. 'https://cbt-credit-zxgb.onrender.com'
+const API_BASE = 'https://cbt-credit-zxgb.onrender.com'; // Set your Flask URL here, e.g. 'https://cbt-credit-zxgb.onrender.com'
 const DEFAULT_AVATAR = 'https://i.postimg.cc/JhG5Z8V8/1000323583-removebg-preview.png';
 
 const resultData = JSON.parse(localStorage.getItem('resultData'));
