@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CBT Credit - Exam Mod3</title>
+  <link rel="stylesheet" href="css.css">
+  <link rel="stylesheet" href="cbt-exam.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- theme will still apply from localStorage, but no floating card -->
+  <script>
+    // Just apply saved theme
+    const theme = localStorage.getItem('cbt_theme_mode') || 'normal';
+    if (theme === 'light') document.body.classList.add('light-mode');
+    if (theme === 'dark') document.body.classList.add('dark-mode');
+  </script>
+  <div class="toast-container" id="toastContainer"></div>
+  
+  <!-- HEADER -->
+  <div class="header">
+    <div class="circle3" onclick="location.href='home.html'">
+      <img src="https://i.postimg.cc/KYJMWhQw/1000324996-removebg-preview.png" alt="Back">
+    </div>
+    <div class="title">CBT Exam</div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <section class="section">
+    <h2>Select Exam Type</h2>
+
+    <div class="exam-card" data-exam="JAMB" data-limit="4">
+      <img src="https://i.postimg.cc/6qJ1xR1X/jamb-logo.png" alt="JAMB" class="exam-logo">
+      <div class="exam-info">
+        <h3>JAMB CBT</h3>
+        <p>Unified Tertiary Matriculation Examination</p>
+        <span class="exam-tag">4 Subjects Required</span>
+      </div>
+      <div class="exam-arrow">→</div>
+    </div>
+
+    <div class="exam-card" data-exam="POST-UTME" data-limit="4">
+      <img src="https://i.postimg.cc/6qJ1xR1X/post-utme-logo.png" alt="POST UTME" class="exam-logo">
+      <div class="exam-info">
+        <h3>POST UTME</h3>
+        <p>Post Unified Tertiary Matriculation Exam</p>
+        <span class="exam-tag">4 Subjects Required</span>
+      </div>
+      <div class="exam-arrow">→</div>
+    </div>
+
+    <div class="exam-card" data-exam="WAEC" data-limit="1">
+      <img src="https://i.postimg.cc/6qJ1xR1X/waec-logo.png" alt="WAEC" class="exam-logo">
+      <div class="exam-info">
+        <h3>WAEC CBT</h3>
+        <p>West African Examinations Council</p>
+        <span class="exam-tag">1 Subject - 50 Questions</span>
+      </div>
+      <div class="exam-arrow">→</div>
+    </div>
+
+    <div class="exam-card" data-exam="NECO" data-limit="1">
+      <img src="https://i.postimg.cc/6qJ1xR1X/neco-logo.png" alt="NECO" class="exam-logo">
+      <div class="exam-info">
+        <h3>NECO CBT</h3>
+        <p>National Examinations Council</p>
+        <span class="exam-tag">1 Subject Required</span>
+      </div>
+      <div class="exam-arrow">→</div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Challenge Mode</h2>
+    <div class="exam-card challenge-card" data-exam="CHALLENGE">
+      <img src="https://i.postimg.cc/6qJ1xR1X/challenge-logo.png" alt="Challenge" class="exam-logo">
+      <div class="exam-info">
+        <h3>Challenge CBT</h3>
+        <p>Compete with others in timed tests</p>
+        <span class="exam-tag">JAMB or WAEC Format</span>
+      </div>
+      <div class="exam-arrow">→</div>
+    </div>
+  </section>
+
+  <!-- CHALLENGE TYPE MODAL -->
+  <div class="modal-overlay" id="challengeModal">
+    <div class="modal-card picker-card">
+      <h3>Select Challenge Type</h3>
+      <div class="picker-list">
+        <div class="picker-item" data-type="JAMB">JAMB Schedule - 4 Subjects</div>
+        <div class="picker-item" data-type="WAEC">WAEC Schedule - 1 Subject</div>
+      </div>
+      <div class="modal-buttons">
+        <button class="btn btn-secondary" id="challengeCloseBtn">Close</button>
+        <button class="btn" id="challengeProceedBtn">Proceed</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUBJECT SELECT MODAL -->
+  <div class="modal-overlay" id="subjectModal">
+    <div class="modal-card picker-card">
+      <h3 id="subjectModalTitle">Select Subject</h3>
+      
+      <!-- INFO INSIDE MODAL -->
+      <div class="modal-info-card">
+        <div class="modal-info-row">
+          <span class="modal-info-label">Exam:</span>
+          <span class="modal-info-value" id="modalExamType">JAMB CBT</span>
+        </div>
+        <div class="modal-info-row">
+          <span class="modal-info-label">Selected:</span>
+          <span class="modal-info-value" id="subjectCounter">0/4</span>
+        </div>
+      </div>
+
+      <div class="picker-list" id="subjectList"></div>
+      <div class="modal-error" id="subjectError"></div>
+      <p><strong>Note:</strong>Scroll for more subject</p>
+      
+      <div class="modal-buttons">
+        <button class="btn btn-secondary" id="subjectCloseBtn">Close</button>
+        <button class="btn" id="subjectProceedBtn">Proceed</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- INSTRUCTIONS MODAL -->
+  <div class="modal-overlay" id="instructionModal">
+    <div class="modal-card picker-card">
+      <h3 id="instructionTitle">JAMB CBT Instructions</h3>
+      <div class="instruction-content" id="instructionContent"></div>
+      
+      <!-- NOTE INSIDE MODAL -->
+      <div class="modal-note-card">
+        <div class="modal-note-title">⚠ Rules</div>
+        <ul class="modal-note-list">
+          <li>Do not refresh or close browser during exam</li>
+          <li>Do not switch tabs or minimize window</li>
+          <li>Malpractice = auto submit + disqualification</li>
+          <li>Timer will not pause once started</li>
+          <li>Ensure stable internet connection. Do not refresh the page.</li>
+          <li>Each question carries equal marks</li>
+          <li>You can navigate between questions</li>
+          <li>Submit before time runs out</li>
+        </ul>
+      </div>
+      
+      <div class="modal-buttons">
+        <button class="btn btn-secondary" id="instructionCloseBtn">Close</button>
+        <button class="btn" id="instructionStartBtn">Start</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module"src="cbt-exam.js"></script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>CBT Credit - Exam</title>
+  <link rel="stylesheet" href="css.css">
+  <link rel="stylesheet" href="exam.css">
+</head>
+<body>
+  <!-- theme will still apply from localStorage, but no floating card -->
+  <script>
+    // Just apply saved theme
+    const theme = localStorage.getItem('cbt_theme_mode') || 'normal';
+    if (theme === 'light') document.body.classList.add('light-mode');
+    if (theme === 'dark') document.body.classList.add('dark-mode');
+  </script>
+  <div class="toast-container" id="toastContainer"></div>
+  <div class="exam-header">
+    <div class="exam-title" id="examTitle">Loading...</div>
+    <div class="timer-wrap">
+      <div class="timer" id="timer">00:00:00</div>
+      <div class="header-actions">
+        <button class="calc-indicator" id="calcBtn" style="display:none;" title="Open Calculator">
+          <img src="https://i.postimg.cc/bwH1gxQc/1000354739-removebg-preview.png" alt="calc">
+        </button>
+        <button class="btn btn-danger btn-sm" id="submitBtn">Submit</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="subject-tabs" id="subjectTabs" style="display:none;"></div>
+
+  <div class="exam-scroll-area" id="examScrollArea">
+    <div class="question-card">
+      <div class="question-header">
+        <div class="question-counter" id="questionCounter">Question 1 of 1</div>
+        <div class="question-subject" id="questionSubject">Subject</div>
+      </div>
+      <div class="question-image" id="questionImage" style="display:none;">
+        <img src="" alt="Question Image">
+      </div>
+      <div class="question-text" id="questionText">Loading...</div>
+      <div class="options" id="optionsContainer"></div>
+
+      <div class="question-controls">
+        <button class="btn btn-secondary" id="prevBtn">Previous</button>
+        <button class="btn" id="nextBtn">Next</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="question-footer" id="questionFooter">
+    <div class="footer-handle" id="footerHandle">
+      <div class="handle-bar"></div>
+    </div>
+    <div class="question-nav" id="questionNav"></div>
+  </div>
+
+  <div class="modal-overlay" id="calcModal">
+    <div class="calc-card">
+      <div class="calc-display" id="calcDisplay">0</div>
+      <div class="calc-buttons">
+        <button class="calc-btn-sm" data-val="C">C</button>
+        <button class="calc-btn-sm" data-val="(">(</button>
+        <button class="calc-btn-sm" data-val=")">)</button>
+        <button class="calc-btn-sm op" data-val="/">÷</button>
+        <button class="calc-btn-sm" data-val="7">7</button>
+        <button class="calc-btn-sm" data-val="8">8</button>
+        <button class="calc-btn-sm" data-val="9">9</button>
+        <button class="calc-btn-sm op" data-val="*">×</button>
+        <button class="calc-btn-sm" data-val="4">4</button>
+        <button class="calc-btn-sm" data-val="5">5</button>
+        <button class="calc-btn-sm" data-val="6">6</button>
+        <button class="calc-btn-sm op" data-val="-">-</button>
+        <button class="calc-btn-sm" data-val="1">1</button>
+        <button class="calc-btn-sm" data-val="2">2</button>
+        <button class="calc-btn-sm" data-val="3">3</button>
+        <button class="calc-btn-sm op" data-val="+">+</button>
+        <button class="calc-btn-sm zero" data-val="0">0</button>
+        <button class="calc-btn-sm" data-val=".">.</button>
+        <button class="calc-btn-sm op" data-val="=">=</button>
+      </div>
+      <button class="btn" id="calcCloseBtn">Close</button>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="submitModal">
+    <div class="confirm-card">
+      <div class="confirm-icon">⚠</div>
+      <h3>Submit Exam?</h3>
+      <p>You won't be able to change answers after submitting.</p>
+      <div class="confirm-buttons">
+        <button class="btn btn-secondary" id="submitNo">No, Cancel</button>
+        <button class="btn btn-danger" id="submitYes">Yes, Submit</button>
+      </div>
+    </div>
+  </div>
+
+<script type="module" src="exam.js"></script>
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CBT Credit — Notifications</title>
+  <link rel="stylesheet" href="css.css">
+  <style>
+    /* Override only for notifications - blush green, no gold */
+    :root {
+      --notif-primary: #A3E4D7;
+      --notif-primary-hover: rgba(163, 228, 215, 0.15);
+      --notif-glass: rgba(163, 228, 215, 0.1);
+      --notif-border: rgba(163, 228, 215, 0.3);
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.5;
+    }
+
+  .card {
+      max-width: 750px;
+      margin: 40px auto;
+      background: var(--card-bg);
+      padding: 24px;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shad);
+      border: 1px solid var(--notif-border);
+    }
+
+    h1 {
+      margin: 0 0 20px 0;
+      border-bottom: 2px solid var(--notif-primary);
+      padding-bottom: 12px;
+      font-size: 24px;
+      color: var(--notif-primary);
+      font-weight: 600;
+    }
+
+  .notif-item {
+      background: var(--notif-glass);
+      border: 1px solid var(--notif-border);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      margin-bottom: 15px;
+      transition: background 0.2s ease;
+    }
+
+  .notif-item:hover {
+      background: rgba(163, 228, 215, 0.2);
+    }
+
+  .notif-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--notif-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+  .context-block {
+      background: rgba(163, 228, 215, 0.08);
+      border-left: 3px solid var(--notif-primary);
+      padding: 10px 12px;
+      margin: 10px 0;
+      border-radius: 4px;
+      font-size: 14px;
+      color: var(--text);
+    }
+
+  .context-block strong {
+      color: var(--notif-primary);
+    }
+
+  .notif-msg {
+      font-size: 15px;
+      color: var(--text);
+      line-height: 1.5;
+      margin: 10px 0;
+    }
+
+  .notif-msg strong {
+      color: var(--notif-primary);
+    }
+
+  .notif-meta {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 8px;
+      font-style: italic;
+    }
+
+  .fallback-msg {
+      text-align: center;
+      padding: 40px 20px;
+      font-size: 16px;
+      color: var(--text-secondary);
+    }
+
+  .back-btn {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 10px 18px;
+      border: 1px solid var(--notif-primary);
+      border-radius: 6px;
+      color: var(--notif-primary);
+      text-decoration: none;
+      background: transparent;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+  .back-btn:hover {
+      background: var(--notif-primary-hover);
+      transform: translateY(-1px);
+    }
+
+    #notifications-box {
+      min-height: 100px;
+    }
+  </style>
+</head>
+<body>
+  <script>
+    const theme = localStorage.getItem('cbt_theme_mode') || 'normal';
+    if (theme === 'light') document.body.classList.add('light-mode');
+    if (theme === 'dark') document.body.classList.add('dark-mode');
+  </script>
+
+  <div class="circle3" onclick="location.href='home.html'">
+      <img src="https://i.postimg.cc/KYJMWhQw/1000324996-removebg-preview.png" alt="Back">
+    </div>
+  
+  <main class="card">
+    <h1>Notifications</h1>
+    <div id="notifications-box">Loading...</div>
+  </main>
+
+  <script src="config.js"></script>
+  <script>
+    function getAuthenticatedUser() {
+      const userString = localStorage.getItem('user');
+      if (!userString) return null;
+      try { return JSON.parse(userString); } catch(e) { return null; }
+    }
+
+    async function fetchUserNotifications() {
+      const container = document.getElementById('notifications-box');
+      const activeUser = getAuthenticatedUser();
+
+      if (!activeUser || (!activeUser.user_id &&!activeUser.id)) {
+        container.innerHTML = `
+          <div class="fallback-msg" style="color: #ef4444!important;">
+            Authentication Missing. Please login to view notifications.
+            <br><a href="login.html" class="back-btn">Go to Login Page</a>
+          </div>`;
+        return;
+      }
+
+      const targetUserId = activeUser.user_id || activeUser.id;
+
+      try {
+        const res = await fetch(`${API_URL}/notifications/${targetUserId}`);
+        if (!res.ok) throw new Error();
+        const notifications = await res.json();
+
+        if (notifications.length === 0) {
+          container.innerHTML = `<div class="fallback-msg">Your alerts and system feedback history are completely clear.</div>`;
+          return;
+        }
+
+        let htmlContent = "";
+        notifications.forEach(item => {
+          const formattedDate = new Date(item.created_at).toLocaleString();
+          let questionLabel = "No detailed question structure context provided.";
+
+          if(item.question_context) {
+            try {
+              const parsed = JSON.parse(item.question_context);
+              questionLabel = parsed.question || item.question_context;
+            } catch(e) {
+              questionLabel = item.question_context;
+            }
+          }
+
+          htmlContent += `
+            <div class="notif-item">
+              <div class="notif-title">cbt.credit replied to your comment on</div>
+              <div class="context-block">
+                <strong>Question Context:</strong> ${escapeHtml(questionLabel)}
+              </div>
+              <div class="notif-msg">
+                <strong>Response from cbt.credit:</strong> "${escapeHtml(item.message)}"
+              </div>
+              <div class="notif-meta">Date & Time: ${formattedDate}</div>
+            </div>
+          `;
+        });
+        container.innerHTML = htmlContent;
+
+      } catch (err) {
+        container.innerHTML = `<div class="fallback-msg" style="color: #ef4444!important;">Failed to pull current notification. Check your network and try again.</div>`;
+      }
+    }
+
+    function escapeHtml(str) {
+      return String(str || '').replace(/[&<>"']/g, m => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+      }[m]));
+    }
+
+    window.addEventListener('DOMContentLoaded', fetchUserNotifications);
+  </script>
+</body>
+</html>

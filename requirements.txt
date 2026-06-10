@@ -1,0 +1,9 @@
+flask
+flask-cors
+psycopg2-binary
+werkzeug
+gunicorn
+flask-mail
+webauth
+sendgrid
+https://replit.com/refer/odogid101
